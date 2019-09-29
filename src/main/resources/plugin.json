@@ -1,0 +1,7 @@
+{
+  "name": "GHVoteSurrender",
+  "author": "(G_H)",
+  "main": "ghvotesurrender.GHVoteSurrender",
+  "description": "A plugin that hold a Vote System for Surrendering.",
+  "version": 0.1
+}
