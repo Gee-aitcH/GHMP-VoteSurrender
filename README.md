@@ -8,16 +8,16 @@ Usage:
 
 `ghvs y/n` to (Host&)Vote.
 
-`ghvs vr` to Set/Get the Vote Requirement(in '%' form).
-
-`ghvs help` to show this message. 
-
 Notes: 2 x 'y' = -1 x 'n'. 2 Votes on Yes are equivalent to Only 1 Vote on No.
 
 A Vote is Passed When There are Over 34%.
 
+
 #### Notes:
-2 * `yes` = -1 * `no`. 2 Votes on Yes are equivalent to 1 Vote on No Only.
+
+2 * `y` = -1 * `n`. 2 Votes on `Yes` are equivalent to Only 1 Vote on `No`.
+A Vote is Passed When There are Over 34%.
+
 
 ### Setup
 
