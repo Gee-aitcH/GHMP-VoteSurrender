@@ -28,7 +28,7 @@ public class GHVoteSurrender extends Plugin{
         Events.on(EventType.PlayEvent.class, () -> gameOver = false);
     }
 
-    public void registerServerCommands(CommandHandler handler){
+    public void registerServerCommands(CommandHandler handler) {
         handler.register(cmd, "[on/off|y/n|vr|help...]", description, arg -> {
             String[] args = arg[0].split(" ");
             System.out.println("test0");
@@ -38,34 +38,31 @@ public class GHVoteSurrender extends Plugin{
                                 voting.status()));
             else switch (args[0]) {
                 case "vr":
-                    System.out.println("test1");
-                    try{
-                        System.out.println("test2");
-                        if(args.length < 2) {
-                            System.out.println("test3");
+                    try {
+                        if (args.length < 2) {
                             Log.info("Current Vote Requirement is " + votesRequired() + "%.");
                             break;
                         }
-                        System.out.println("test4");
                         float f = Float.valueOf(args[1]);
-                        System.out.println("test5");
                         votesRequired(f);
-                        System.out.println("test10");
-                    }catch (NumberFormatException e){
-                        System.out.println("test11");
+                    } catch (NumberFormatException e) {
                         Log.info("args[0] is not float. Try again.");
-                        System.out.println("test12");
                         break;
                     }
-                    System.out.println("test13");
                     break;
-                case "on": case "off":
-                    mode(args[0].equals("on"));
+                case "mode":
+                    if (args.length < 2) {
+                        Log.info("Current Mode is " + mode() + "%.");
+                        break;
+                    }
+                    if (args[1].equals("on") || args[1].equals("off")) mode(args[1].equals("on"));
+                    else Log.info("args[1] is not a boolean. Try again.");
                     break;
-                case "y": case "n":
+                case "y":
+                case "n":
                     if (!mode()) return;
                     if (voting == null) newVote();
-                    if(gameOver){
+                    if (gameOver) {
                         player.sendMessage("[lightgray]Just surrendered, please wait a little bit first.");
                         return;
                     }
@@ -94,15 +91,25 @@ public class GHVoteSurrender extends Plugin{
                         (voting == null ? "No Voting Session is being hosted right now. Use '" + cmd + " y' or '" + cmd + " n' to start a new voting session." :
                                 voting.status()));
             else switch (args[0]) {
-                case "on": case "off":
-                    if(player.isAdmin) mode(args[0].equals("on")); else player.sendMessage("[scarlet]Admin Only.");
+                case "mode":
+                    if (!player.isAdmin) {
+                        player.sendMessage("[scarlet]Admin Only.");
+                        return;
+                    }
+                    if (args.length < 2) {
+                        Log.info("Current Mode is " + mode() + "%.");
+                        return;
+                    }
+                    if (args[1].equals("on") || args[1].equals("off")) mode(args[1].equals("on"));
+                    else player.sendMessage("args[1] is not a boolean. Try again.");
                     break;
-                case "y": case "n":
+                case "y":
+                case "n":
                     if (!mode()) return;
                     if (System.currentTimeMillis() <= cooldown) {
                         player.sendMessage("[lightgray]Penalty is on right now, you cannot vote during the penalty.");
                         return;
-                    }else if(gameOver){
+                    } else if (gameOver) {
                         player.sendMessage("[lightgray]This game is already over.");
                         return;
                     }
@@ -121,7 +128,7 @@ public class GHVoteSurrender extends Plugin{
                             "A Vote is Passed When There are Over [orange]" + votesRequired() + "%[].");
                     break;
                 default:
-                    player.sendMessage("[lightgray]GH Vote Surrender: Argument not Found.");
+                    player.sendMessage("[lightgray][orannge]GH Vote Surrender[]: Argument not Found.");
                     break;
             }
         });
@@ -139,13 +146,9 @@ public class GHVoteSurrender extends Plugin{
         return Core.settings.getBool("ghvotesurrendermode", true);
     }
     private void votesRequired(float set){
-        System.out.println("test6");
         Core.settings.put("ghvotesurrendervotesrequired", set);
-        System.out.println("test7");
         say("[lightgray][orange]GH Vote Surrender[]: Vote Requirement Set to [orange]" + votesRequired() + "%[].");
-        System.out.println("test81");
         Log.info("GH Vote Surrender: Vote Requirement Set to [orange]" + votesRequired() + "%[].");
-        System.out.println("test9");
     }
     private float votesRequired(){
         return Core.settings.getFloat("ghvotesurrendervotesrequired", 0.5f);
@@ -180,8 +183,8 @@ public class GHVoteSurrender extends Plugin{
             int amount = (player == null ? 3 : player.isAdmin ? 2 : 1);
             if(agree) y += amount; else n += amount * 2;
             if(!console) voted.addAll(player.uuid, netServer.admins.getInfo(player.uuid).lastIP);
-            Call.sendMessage("[orange]" + (console ? "[scarlet][server]" : NetClient.colorizeName(player.id, player.name)) + "[lightgray] has voted for" + (agree ? "" : " not to") + " Surrender. \n" +
-                    status() + "\n[lightgray]Type[orange] /vote <y/n>[] to agree/disagree.");
+            Call.sendMessage("[orange]" + (console ? "[scarlet]Server" : NetClient.colorizeName(player.id, player.name)) + "[lightgray] has voted for" + (agree ? "" : " not to") + " Surrender. \n" +
+                    status() + "\n[lightgray]Type[orange] /" + cmd + " <[orange]y[]/[red]n[]>[] to agree/disagree.");
             checkPass();
         }
 
@@ -189,10 +192,10 @@ public class GHVoteSurrender extends Plugin{
             System.out.println(state.gameOver);
             if(currentVotes() >= votesRequired()){
                 Call.sendMessage("[green]Vote for Surrender is Passed. Surrender in 5s.");
+                gameOver = true;
                 Timer.schedule(() -> {
                     info("&lyVoted Surrender...\n" + playerGroup.all().toString("\n"));
                     Events.fire(new EventType.GameOverEvent(Team.crux));
-                    gameOver = true;
                     },5);
                 cooldown = System.currentTimeMillis() + 1000;
                 voting = null;
