@@ -18,13 +18,6 @@ Default Vote Requirement is `50%`.
 
 Note 2: Without the key argument(`[]`), server will return the current status of that specific subject.
 
-
-#### Notes:
-
-2 * `y` = -1 * `n`. 2 Votes on `Yes` are equivalent to Only 1 Vote on `No`.
-A Vote is Passed When There are Over 34%.
-
-
 ### Setup
 
 Clone this repository first.
