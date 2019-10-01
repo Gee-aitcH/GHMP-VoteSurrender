@@ -4,13 +4,19 @@ Grant Players the Ability to Vote for Surrender.
 
 Usage:
 
-`ghvs on/off` to Turn On/Off the Plugin.
+`ghvs mode [on/off]` to Turn On/Off the Plugin. (Admin Level)
 
-`ghvs y/n` to (Host&)Vote.
+`ghvs vr [float]` to Change the Vote Requirement. (Host Level)
 
-Notes: 2 x 'y' = -1 x 'n'. 2 Votes on Yes are equivalent to Only 1 Vote on No.
+`ghvs [y/n]` to (Host & )Vote.
 
-A Vote is Passed When There are Over 34%.
+`ghvs help` to get the help message.
+
+Note 1: 2 x 'y' = -1 x 'n'. 2 Votes on Yes are equivalent to Only 1 Vote on No.
+
+Default Vote Requirement is `50%`.
+
+Note 2: Without the key argument(`[]`), server will return the current status of that specific subject.
 
 
 #### Notes:
